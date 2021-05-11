@@ -3,41 +3,50 @@ package com.zup.orangetalents.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "tb_endereco")
 public class Endereco {
 
     @Id
-    @Column(name = "idEndereco")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "O campo logradouro não pode estar em branco")
     private String logradouro;
 
     @Column(nullable = false)
+    @Min(value = 1, message = "Número inválido")
     private int numero;
 
     @Column(nullable = false)
+    @NotBlank(message = "O campo complemento não pode estar em branco")
     private String complemento;
 
     @Column(nullable = false)
+    @NotBlank(message = "O campo bairro não pode estar em branco")
     private String bairro;
 
     @Column(nullable = false)
+    @NotBlank(message = "O campo cidade não pode estar em branco")
     private String cidade;
 
     @Column(nullable = false)
+    @NotBlank(message = "O campo estado não pode estar em branco")
     private String estado;
 
     @Column(nullable = false)
+    @NotBlank(message = "O campo CEP não pode estar em branco")
     private String cep;
 
     @Column(nullable = false)
+    @NotBlank(message = "O campo nome do endereço não pode estar em branco")
     private String nomeEndereco;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnoreProperties("listaEndereco")
     private Usuario usuario;
 

@@ -1,8 +1,12 @@
 package com.zup.orangetalents.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -11,27 +15,35 @@ import java.util.List;
 public class Usuario {
 
     @Id
-    @Column(unique = true)
-    private Long cpf;
+    @Column(nullable = false, unique = true)
+    @CPF(message = "CPF inválido!")
+    @NotBlank(message = "O campo CPF não pode estar em branco")
+    private String cpf;
 
     @Column(nullable = false)
+    @NotBlank(message = "O campo nome não pode estar em branco")
     private String nome;
 
     @Column(nullable = false, unique = true)
+    @NotBlank(message = "O campo email não pode estar em branco")
     private String email;
 
     @Column(nullable = false)
     private LocalDate dataNascimento;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "usuario")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnoreProperties("usuario")
     private List<Endereco> listaEndereco;
 
-    public Long getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
-    public void setCpf(Long cpf) {
+    public void setCpf(String cpf) {
+        cpf = cpf.replace("-", "");
+        cpf = cpf.replace(".", "");
+
         this.cpf = cpf;
     }
 
